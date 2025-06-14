@@ -82,6 +82,31 @@ class ColaPacientes {
         }
         System.out.println("No se encontró un paciente con ID: " + id);
     }
+
+    public void eliminarPorId(int id) {
+        if (persona == null) {
+            System.out.println("No hay pacientes para eliminar.");
+            return;
+        }
+
+        if (persona.id == id) {
+            System.out.println("Paciente eliminado: " + persona);
+            persona = persona.siguiente;
+            return;
+        }
+
+        Paciente actual = persona;
+        while (actual.siguiente != null) {
+            if (actual.siguiente.id == id) {
+                System.out.println("Paciente eliminado: " + actual.siguiente);
+                actual.siguiente = actual.siguiente.siguiente;
+                return;
+            }
+            actual = actual.siguiente;
+        }
+
+        System.out.println("No se encontró un paciente con ID: " + id);
+    }
 }
 
 public class App {
@@ -140,6 +165,20 @@ public class App {
         }
     }
 
+    public static void eliminarPacientePorId(Scanner scanner, ColaPacientes cola) {
+        while (true) {
+            System.out.print("Ingrese el ID del paciente a eliminar: ");
+            String entrada = scanner.nextLine().trim();
+            try {
+                int id = Integer.parseInt(entrada);
+                cola.eliminarPorId(id);
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Entrada inválida. Debe ingresar un número entero. Inténtelo nuevamente.");
+            }
+        }
+    }
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         ColaPacientes cola = new ColaPacientes();
@@ -149,6 +188,7 @@ public class App {
             System.out.println("2. Mostrar pacientes");
             System.out.println("3. Atender paciente");
             System.out.println("4. Buscar paciente por ID");
+            System.out.println("5. Eliminar paciente por ID");
             System.out.println("0. Salir");
             System.out.print("Seleccione una opción: ");
             int opcion = scanner.nextInt();
@@ -166,6 +206,9 @@ public class App {
                     break;
                 case 4:
                     buscarPacientePorId(scanner, cola);
+                    break;
+                case 5:
+                    eliminarPacientePorId(scanner, cola);
                     break;
                 case 0:
                     System.out.println("Saliendo del sistema...");
