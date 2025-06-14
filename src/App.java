@@ -70,6 +70,18 @@ class ColaPacientes {
         persona = persona.siguiente;
         return "Paciente atendido: " + atendido;
     }
+
+    public void buscarPorId(int id) {
+        Paciente actual = persona;
+        while (actual != null) {
+            if (actual.id == id) {
+                System.out.println("Paciente encontrado: " + actual);
+                return;
+            }
+            actual = actual.siguiente;
+        }
+        System.out.println("No se encontró un paciente con ID: " + id);
+    }
 }
 
 public class App {
@@ -114,6 +126,20 @@ public class App {
         System.out.println(mensaje);
     }
 
+    public static void buscarPacientePorId(Scanner scanner, ColaPacientes cola) {
+        while (true) {
+            System.out.print("Ingrese el ID del paciente: ");
+            String entrada = scanner.nextLine().trim();
+            try {
+                int id = Integer.parseInt(entrada);
+                cola.buscarPorId(id);
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Entrada inválida. Debe ingresar un número entero. Inténtelo nuevamente.");
+            }
+        }
+    }
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         ColaPacientes cola = new ColaPacientes();
@@ -122,6 +148,7 @@ public class App {
             System.out.println("\n1. Agregar paciente");
             System.out.println("2. Mostrar pacientes");
             System.out.println("3. Atender paciente");
+            System.out.println("4. Buscar paciente por ID");
             System.out.println("0. Salir");
             System.out.print("Seleccione una opción: ");
             int opcion = scanner.nextInt();
@@ -136,6 +163,9 @@ public class App {
                     break;
                 case 3:
                     atenderPaciente(cola);
+                    break;
+                case 4:
+                    buscarPacientePorId(scanner, cola);
                     break;
                 case 0:
                     System.out.println("Saliendo del sistema...");
