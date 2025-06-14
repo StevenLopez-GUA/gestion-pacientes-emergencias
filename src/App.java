@@ -107,9 +107,38 @@ class ColaPacientes {
 
         System.out.println("No se encontró un paciente con ID: " + id);
     }
+
+    public int contarPacientes() {
+        int contador = 0;
+        Paciente actual = persona;
+        while (actual != null) {
+            contador++;
+            actual = actual.siguiente;
+        }
+        return contador;
+    }
 }
 
 public class App {
+
+    public static void limpiarConsola() {
+        try {
+            if (System.getProperty("os.name").contains("Mac")) {
+                new ProcessBuilder("clear").inheritIO().start().waitFor();
+            } else {
+                System.out.print("\033[H\033[2J");
+                System.out.flush();
+            }
+        } catch (Exception e) {
+            System.out.println("No se pudo limpiar la consola.");
+        }
+    }
+
+    public static void esperarYLimpiar(Scanner scanner) {
+        System.out.print("\nPresione ENTER para continuar...");
+        scanner.nextLine();
+        limpiarConsola();
+    }
 
     public static void crearPaciente(Scanner scanner, ColaPacientes cola) {
         String nombre;
@@ -179,6 +208,11 @@ public class App {
         }
     }
 
+    public static void mostrarCantidadPacientes(ColaPacientes cola) {
+        int total = cola.contarPacientes();
+        System.out.println("Cantidad total de pacientes en espera: " + total);
+    }
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         ColaPacientes cola = new ColaPacientes();
@@ -189,6 +223,7 @@ public class App {
             System.out.println("3. Atender paciente");
             System.out.println("4. Buscar paciente por ID");
             System.out.println("5. Eliminar paciente por ID");
+            System.out.println("6. Cantidad de pacientas en espera");
             System.out.println("0. Salir");
             System.out.print("Seleccione una opción: ");
             int opcion = scanner.nextInt();
@@ -197,18 +232,28 @@ public class App {
             switch (opcion) {
                 case 1:
                     crearPaciente(scanner, cola);
+                    esperarYLimpiar(scanner);
                     break;
                 case 2:
                     cola.mostrarPacientes();
+                    esperarYLimpiar(scanner);
                     break;
                 case 3:
                     atenderPaciente(cola);
+                    esperarYLimpiar(scanner);
                     break;
                 case 4:
                     buscarPacientePorId(scanner, cola);
+                    esperarYLimpiar(scanner);
                     break;
                 case 5:
+                    cola.mostrarPacientes();
                     eliminarPacientePorId(scanner, cola);
+                    esperarYLimpiar(scanner);
+                    break;
+                case 6:
+                    mostrarCantidadPacientes(cola);
+                    esperarYLimpiar(scanner);
                     break;
                 case 0:
                     System.out.println("Saliendo del sistema...");
