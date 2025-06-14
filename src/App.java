@@ -61,6 +61,15 @@ class ColaPacientes {
             return nuevo.horaLlegada.compareTo(existente.horaLlegada) < 0;
         return false;
     }
+
+    public String atenderPaciente() {
+        if (persona == null) {
+            return "No hay pacientes para atender.";
+        }
+        Paciente atendido = persona;
+        persona = persona.siguiente;
+        return "Paciente atendido: " + atendido;
+    }
 }
 
 public class App {
@@ -100,6 +109,11 @@ public class App {
         cola.agregarPaciente(nombre, urgencia, hora);
     }
 
+    public static void atenderPaciente(ColaPacientes cola) {
+        String mensaje = cola.atenderPaciente();
+        System.out.println(mensaje);
+    }
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         ColaPacientes cola = new ColaPacientes();
@@ -107,7 +121,8 @@ public class App {
         while (true) {
             System.out.println("\n1. Agregar paciente");
             System.out.println("2. Mostrar pacientes");
-            System.out.println("3. Salir");
+            System.out.println("3. Atender paciente");
+            System.out.println("0. Salir");
             System.out.print("Seleccione una opción: ");
             int opcion = scanner.nextInt();
             scanner.nextLine(); // Limpiar buffer
@@ -120,6 +135,9 @@ public class App {
                     cola.mostrarPacientes();
                     break;
                 case 3:
+                    atenderPaciente(cola);
+                    break;
+                case 0:
                     System.out.println("Saliendo del sistema...");
                     return;
                 default:
